@@ -1,0 +1,315 @@
+<?php
+class datemath {
+	public static function add($date,$unit,$value){
+		//Working days
+		if($unit === "businessdays") {
+			$datedb = new DB();
+			$sql = "SELECT `bkh_date` FROM `tbl_BankHoliday`";
+			$holidays = array();
+			$bankholidays = $datedb->query($sql);
+			foreach($bankholidays->results() as $bh){
+				$holidays[] = $bh->bkh_date;
+			}
+			$date = strtotime(date("Y-m-d",$date));
+			$date = $date + (86400 * ($value - 1));
+			do {
+				$date = $date + (86400);
+			} while (date("N",$date) > 5 or in_array(date("Y-m-d",$date), $holidays));
+			return date("Y-m-d", $date);
+		}
+        if($unit === 'days'){
+            $days = $value*60*60*24;
+            $date = $date + $days;
+			return date("Y-m-d", $date);
+        }
+
+		if($unit==="secs"){
+			$date = $date + $value;
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="mins"){
+			$date = $date + (60 * $value);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="hrs"){
+			$date = $date + (60 * 60 * $value);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="m:s"){
+			$values = explode(":",$value);
+			$mins = $units[0]*60;
+			$secs = $units[1];
+			$date = $date + ($mins + $secs);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="h:m"){
+			$values = explode(":",$value);
+			$hrs = $units[0]*60*60;
+			$mins = $units[1]*60;
+			$date = $date + ($hrs + $mins);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="h:m:s"){
+			$values = explode(":",$value);
+			$hrs = $units[0]*60*60;
+			$mins = $units[1]*60;
+			$secs = $units[2];
+			$date = $date + ($hrs + $mins + $secs);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="d:h"){
+			$values = explode(":",$value);
+			$days = $units[0]*60*60*24;
+			$hrs = $units[1]*60*60;
+			$date = $date + ($days + $hrs);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="d:h:m"){
+			$values = explode(":",$value);
+			$days = $units[0]*60*60*24;
+			$hrs = $units[1]*60*60;
+			$mins = $units[2]*60;
+			$date = $date + ($days + $hrs + $mins);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="d:h:m:s"){
+			$values = explode(":",$value);
+			$days = $units[0]*60*60*24;
+			$hrs = $units[1]*60*60;
+			$mins = $units[2]*60;
+			$secs = $units[3];
+			$date = $date + ($days + $hrs + $mins + $secs);
+			return date("Y-m-d H:i:s", $date);
+		}
+	}
+
+
+    public static function sub($date,$unit,$value){
+		//Working days
+		if($unit === "businessdays") {
+			$datedb = new DB();
+			$sql = "SELECT `bkh_date` FROM `tbl_BankHoliday`";
+			$holidays = array();
+			$bankholidays = $datedb->query($sql);
+			foreach($bankholidays->results() as $bh){
+				$holidays[] = $bh->bkh_date;
+			}
+			$date = strtotime(date("Y-m-d",$date));
+			$date = $date - (86400 * ($value - 1));
+			do {
+				$date = $date - (86400);
+			} while (date("N",$date) > 5 or in_array(date("Y-m-d",$date), $holidays));
+			return date("Y-m-d", $date);
+		}
+        if($unit === 'days'){
+            $days = $value*60*60*24;
+            $date = $date - $days;
+			return date("Y-m-d", $date);
+        }
+
+		if($unit==="secs"){
+			$date = $date - $value;
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="mins"){
+			$date = $date - (60 * $value);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="hrs"){
+			$date = $date - (60 * 60 * $value);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="m:s"){
+			$values = explode(":",$value);
+			$mins = $units[0]*60;
+			$secs = $units[1];
+			$date = $date - ($mins + $secs);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="h:m"){
+			$values = explode(":",$value);
+			$hrs = $units[0]*60*60;
+			$mins = $units[1]*60;
+			$date = $date - ($hrs + $mins);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="h:m:s"){
+			$values = explode(":",$value);
+			$hrs = $units[0]*60*60;
+			$mins = $units[1]*60;
+			$secs = $units[2];
+			$date = $date - ($hrs + $mins + $secs);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="d:h"){
+			$values = explode(":",$value);
+			$days = $units[0]*60*60*24;
+			$hrs = $units[1]*60*60;
+			$date = $date - ($days + $hrs);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="d:h:m"){
+			$values = explode(":",$value);
+			$days = $units[0]*60*60*24;
+			$hrs = $units[1]*60*60;
+			$mins = $units[2]*60;
+			$date = $date - ($days + $hrs + $mins);
+			return date("Y-m-d H:i:s", $date);
+		}
+		if($unit==="d:h:m:s"){
+			$values = explode(":",$value);
+			$days = $units[0]*60*60*24;
+			$hrs = $units[1]*60*60;
+			$mins = $units[2]*60;
+			$secs = $units[3];
+			$date = $date - ($days + $hrs + $mins + $secs);
+			return date("Y-m-d H:i:s", $date);
+		}
+	}
+
+    public static function diff($date1,$date2,$format = '%d'){
+
+        //////////////////////////////////////////////////////////////////////
+        //Date should be in YYYY-MM-DD format
+        //RESULT FORMAT:
+        // '%y Year %m Month %d Day %h Hours %i Minute %s Seconds'        =>  1 Year 3 Month 14 Day 11 Hours 49 Minute 36 Seconds
+        // '%y Year %m Month %d Day'                                    =>  1 Year 3 Month 14 Days
+        // '%m Month %d Day'                                            =>  3 Month 14 Day
+        // '%d Day %h Hours'                                            =>  14 Day 11 Hours
+        // '%d Day'                                                        =>  14 Days
+        // '%h Hours %i Minute %s Seconds'                                =>  11 Hours 49 Minute 36 Seconds
+        // '%i Minute %s Seconds'                                        =>  49 Minute 36 Seconds
+        // '%h Hours                                                    =>  11 Hours
+        // '%a Days                                                        =>  468 Days
+        //////////////////////////////////////////////////////////////////////
+
+
+      $datetime1 = date_create($date1);
+      $datetime2 = date_create($date2);
+
+			$interval = date_diff($datetime1, $datetime2);
+
+    	return $interval->format($format);
+    }
+
+		// Get Bank Holidays
+		public static function bank_holidays($year){
+			$bankhoidays = array();
+		  // Easter is a bit different to other bank holidays in that it is calculated on the phase of the Moon
+		  // PHP has two functions for dealing with Easter, because of variations in localtime I am using the
+		  // method which finds the number of days after March 22 which uses the "easter_days()" function.
+
+		  // New Year
+		  $holiday = 'New year';
+		  $base = new DateTime("$year-01-01");;
+		  $original = $base->format('Y-m-d');
+		  switch ($base->format('N')) {
+		    case 6://Saturday
+		      $base = $base->add(new DateInterval("P2D"));
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 1);
+		    break;
+		    case 7://Sunday
+		      $base = $base->add(new DateInterval("P1D"));
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 1);
+		    break;
+		    default:// All other days
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 0);
+		    break;
+		  }
+		  // Good Friday
+		  $holiday = 'Good Friday';
+		  $base = new DateTime("$year-03-21");
+		  $days = easter_days($year)-2;
+
+		  $base->add(new DateInterval("P{$days}D"));
+		  $original = $base->format('Y-m-d');
+		  $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 0);
+
+		  // Easter Monday
+		  $holiday = 'Easter Monday';
+		  $base = new DateTime("$year-03-21");
+		  $days = easter_days($year)+1;
+		  $base->add(new DateInterval("P{$days}D"));
+		  $original = $base->format('Y-m-d');
+		  $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 0);
+
+		  // Early May bank holiday (First Monday of May)
+		  $holiday = 'May Day';
+		  $base = new DateTime("$year-05-01");
+		  if($base->format('N') == 1) {
+		    $base->add(new DateInterval("P0D"));
+		  } else {
+		    $days = (8 - $base->format('N'));
+		    $base->add(new DateInterval("P{$days}D"));
+		  }
+		  $original = $base->format('Y-m-d');
+		  $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 0);
+
+		  // Late May (Spring) bank holiday (Last Monday of May)
+		  $holiday = 'Spring Bank Holiday';
+		  $base = new DateTime("$year-05-31");
+		  if($base->format('N') == 1) {
+		    $base->add(new DateInterval("P0D"));
+		  } else {
+		    $days = ($base->format('N')-1);
+		    $base->sub(new DateInterval("P{$days}D"));
+		  }
+		  $original = $base->format('Y-m-d');
+		  $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 0);
+
+		  // Late August (Summer) bank holiday (Last Monday of August)
+		  $holiday = 'Summer Bank Holiday';
+		  $base = new DateTime("$year-08-31");
+		  if($base->format('N') == 1) {
+		    $base->add(new DateInterval("P0D"));
+		  } else {
+		    $days = ($base->format('N')-1);
+		    $base->sub(new DateInterval("P{$days}D"));
+		  }
+		  $original = $base->format('Y-m-d');
+		  $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 0);
+
+		  // Christmas
+		  $holiday = 'Christmas';
+		  $base = new DateTime("$year-12-25");
+		  $original = $base->format('Y-m-d');
+		  switch ($base->format('N')) {
+		    case 6://Saturday
+		      $base = $base->add(new DateInterval("P3D"));
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 1);
+		    break;
+		    case 7://Sunday
+		      $base = $base->add(new DateInterval("P2D"));
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 1);
+		    break;
+		    case 1://Sunday
+		      $base = $base->add(new DateInterval("P1D"));
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 1);
+		    break;
+		    default:// All other days
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 0);
+		    break;
+		  }
+		  // Boxing Day
+		  $base = new DateTime("$year-12-26");
+		  $holiday = 'Boxing Day';
+		  $original = $base->format('Y-m-d');
+		  switch ($base->format('N')) {
+		    case 6://Saturday
+		      $base = $base->add(new DateInterval("P2D"));
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 1);
+		    break;
+		    case 7://Sunday
+		      $base = $base->add(new DateInterval("P1D"));
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 1);
+		    break;
+		    default:// All other days
+		      $bankhoidays[$base->format('Y-m-d')] = array('holiday' => $holiday, 'original' => $original,'substitute' => 0);
+		    break;
+		  }
+
+		  return $bankhoidays;
+		}
+
+// Class end
+}
